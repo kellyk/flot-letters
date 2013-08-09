@@ -1,0 +1,55 @@
+<html>
+<head>
+	<title>Flot Examples</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/flot/0.8.1/jquery.flot.min.js"></script>
+	<script src="flot.symbol.letters.js"></script>
+
+	<style>
+		h1 { text-align: center; font-family: Arial, sans-serif;}
+		#letter-chart { width: 750; height: 400; }
+		#wrapper {
+			width: 750px;
+			margin: 0 auto;
+			padding: 20px;
+			border: 2px solid #ccc;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Flot Letters</h1>
+	<div id="wrapper">
+		<div id="letter-chart"></div>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+
+		  function generate(offset, amplitude) {
+		    var res = [];
+		    var start = 0, end = 10;
+		    for (var i = 0; i <= 50; ++i) {
+		      var x = start + i / 50 * (end - start);
+		      res.push([x, amplitude * Math.sin(x + offset)]);
+		    }
+		    return res;
+		  } 
+
+		  var data = [
+		    { data: generate(2, 1.8), points: { symbol: "A" } },
+		    { data: generate(3, 1.5), points: { symbol: "B" } },
+		    { data: generate(4, 0.9), points: { symbol: "C" } },
+		    { data: generate(6, 1.4), points: { symbol: "D" } },
+		    { data: generate(7, 1.1), points: { symbol: "E" } }
+		  ];
+		  
+		  $.plot($("#letter-chart"), data, {
+		    series: { points: { show: true, radius: 3 } }
+		  });
+
+		});
+	</script>
+
+</body>
+</html>
