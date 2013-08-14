@@ -1,22 +1,15 @@
 /*
-Flot plugin that adds some extra symbols for plotting points.
-
-The symbols are accessed as strings through the standard symbol
-choice:
-
-  series: {
-      points: {
-          symbol: "square" // or "diamond", "triangle", "cross"
-      }
-  }
-
+    Most of this code is from the Flot Symbol Plugin. 
+    This file simply adds a textSymbol function at the end,
+    which will process any symbol designations (strings) that don't 
+    match the symbol handler list, and insert them into the graph as text.
 */
 
 (function ($) {
     function processRawData(plot, series, datapoints) {
         // we normalize the area of each symbol so it is approximately the
         // same as a circle of the given radius
-
+        var symbol = series.points.symbol;
         var handlers = {
             square: function (ctx, x, y, radius, shadow) {
                 // pi * r^2 = (2s)^2  =>  s = r * sqrt(pi)/2
@@ -50,37 +43,21 @@ choice:
                 ctx.lineTo(x + size, y + size);
                 ctx.moveTo(x - size, y + size);
                 ctx.lineTo(x + size, y - size);
-            },
-            A: function (ctx, x, y, radius, shadow) {
-                ctx.lineWidth = radius/3;
-                ctx.font = '' + radius*3 + 'px Arial';
-                ctx.strokeText("A", x-radius, y-radius);
-            },
-            B: function (ctx, x, y, radius, shadow) {
-                ctx.lineWidth = radius/3;
-                ctx.font = '' + radius*3 + 'px Arial';
-                ctx.strokeText("B", x-radius, y-radius);
-            },
-            C: function (ctx, x, y, radius, shadow) {
-                ctx.lineWidth = radius/3;
-                ctx.font = '' + radius*3 + 'px Arial';
-                ctx.strokeText("C", x-radius, y-radius);
-            },
-            D: function (ctx, x, y, radius, shadow) {
-                ctx.lineWidth = radius/3;
-                ctx.font = '' + radius*3 + 'px Arial';
-                ctx.strokeText("D", x-radius, y-radius);
-            },
-            E: function (ctx, x, y, radius, shadow) {
-                ctx.lineWidth = radius/3;
-                ctx.font = '' + radius*3 + 'px Arial';
-                ctx.strokeText("E", x-radius, y-radius);
-            }
+            } // insert more symbols here
+        };
+
+        function textSymbol (ctx, x, y, radius, shadow) {
+            ctx.lineWidth = radius/3;
+            ctx.font = '' + radius*3 + 'px Arial';
+            ctx.strokeText(symbol, x-radius, y-radius);
         }
 
-        var s = series.points.symbol;
-        if (handlers[s])
-            series.points.symbol = handlers[s];
+        if (symbol != "circle" && symbol.length > 0) {
+            if (handlers[symbol])
+                series.points.symbol = handlers[s];
+            else 
+                series.points.symbol = textSymbol;
+        }
     }
    
     function init(plot) {
