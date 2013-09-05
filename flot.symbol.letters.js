@@ -47,8 +47,11 @@
         };
 
         function textSymbol (ctx, x, y, radius, shadow) {
-            ctx.lineWidth = radius/3;
-            ctx.font = '' + radius*3 + 'px Arial';
+            // font size and line width relative to radius
+            var fontSize = Math.max(radius*3, 9); // min 9px
+            var lineWidth = radius/3 < 1 ? 1 : radius/3; // min 1px
+            ctx.font = '' + fontSize + 'px Arial';
+            ctx.lineWidth = lineWidth;
             ctx.strokeText(symbol, x-radius, y-radius);
         }
 
